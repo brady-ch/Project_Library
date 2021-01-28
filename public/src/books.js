@@ -1,4 +1,6 @@
-let accountMethods = require("./accounts.js");
+function findAccountById(accounts, myId) {
+  return accounts.find(({ id }) => myId === id);
+}
 
 function findAuthorById(authors, id) {
   return authors.find((author) => author.id === id);
@@ -17,7 +19,7 @@ function partitionBooksByBorrowedStatus(books) {
 function getBorrowersForBook(book, accounts) {
   let toReturn = [...book.borrows];
   book.borrows.forEach((element, index) => {
-    let myAccount = accountMethods.findAccountById(accounts, element.id);
+    let myAccount = findAccountById(accounts, element.id);
     toReturn[index] = { ...element, ...myAccount };
   });
   while (toReturn.length > 10) {

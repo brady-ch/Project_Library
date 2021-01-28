@@ -1,4 +1,12 @@
-let booksMethods = require("./books.js");
+function findAuthorById(authors, id) {
+  return authors.find((author) => author.id === id);
+}
+
+function partitionBooksByBorrowedStatus(books) {
+  let isBorrowed = books.filter((book) => !book.borrows[0].returned);
+  let isntBorrowed = books.filter((book) => book.borrows[0].returned);
+  return [isBorrowed, isntBorrowed];
+}
 
 function totalBooksCount(books) {
   return books.length;
@@ -9,7 +17,7 @@ function totalAccountsCount(accounts) {
 }
 
 function booksBorrowedCount(books) {
-  [borrowed, notBorrowed] = booksMethods.partitionBooksByBorrowedStatus(books);
+  [borrowed, notBorrowed] = partitionBooksByBorrowedStatus(books);
   return borrowed.length;
 }
 
@@ -19,7 +27,7 @@ function getMostCommonGenres(books) {
     myObject[genre]
       ? (myObject[genre].count += 1)
       : (myObject[genre] = { count: 1, name: genre });
-  });
+  }); //{genre: {count: x, name: genre}}
   return toArraySortAndSplice(myObject);
 }
 
@@ -35,9 +43,9 @@ function getMostPopularAuthors(books, authors) {
   let myObject = {};
   books.forEach(({ authorId, borrows }) => {
     author =
-      booksMethods.findAuthorById(authors, authorId).name.first +
+      findAuthorById(authors, authorId).name.first +
       " " +
-      booksMethods.findAuthorById(authors, authorId).name.last;
+      findAuthorById(authors, authorId).name.last;
     myObject[author]
       ? (myObject[author].count += borrows.length)
       : (myObject[author] = { count: borrows.length, name: author });
